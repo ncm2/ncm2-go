@@ -5,7 +5,8 @@ let s:loaded = 1
 
 let g:ncm2_go#proc = yarp#py3('ncm2_go')
 
-let g:ncm2_go#source = get(g:, 'ncm2_go#source', {
+let g:ncm2_go#source = extend(
+            \ get(g:, 'ncm2_go#source', {}), {
             \ 'name': 'go',
             \ 'priority': 9,
             \ 'mark': 'go',
@@ -16,11 +17,7 @@ let g:ncm2_go#source = get(g:, 'ncm2_go#source', {
             \ 'complete_pattern': ['\.', '::'],
             \ 'on_complete': 'ncm2_go#on_complete',
             \ 'on_warmup': 'ncm2_go#on_warmup',
-            \ })
-
-let g:ncm2_go#source = extend(g:ncm2_go#source,
-            \ get(g:, 'ncm2_go#source_override', {}),
-            \ 'force')
+            \ }, 'keep')
 
 let g:ncm2_go#gocode_path = get(g:, 'ncm2_go#gocode_path', 'gocode')
 
