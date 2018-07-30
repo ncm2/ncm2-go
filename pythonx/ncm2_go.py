@@ -39,14 +39,13 @@ class Source(Ncm2Source):
         src = "\n".join(lines)
         src = self.get_src(src, ctx)
         lnum = ctx['lnum']
-        ccol = ctx['ccol']
         bcol = ctx['bcol']
         typed = ctx['typed']
         filepath = ctx['filepath']
-        startccol = ctx['startccol']
 
-        src = src.encode('utf-8')
-        offset = self.lccol2pos(lnum, ccol, src)
+        # use byte addressing
+        src = src.encode()
+        offset = self.lccol2pos(lnum, bcol, src)
 
         gocode = self.get_gocode(data)
         args = args = [gocode, '-f', 'json',
@@ -66,7 +65,7 @@ class Source(Ncm2Source):
 
         completions = result[1]
         startbcol = bcol - result[0]
-        startccol = len(typed.encode()[: startbcol-1]) + 1
+        startccol = len(typed.encode()[: startbcol-1].decode()) + 1
 
         if startbcol == bcol and re.match(r'\w', ctx['typed'][-1]):
             # workaround gocode bug when completion is triggered in a
